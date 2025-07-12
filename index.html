@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LifelineGrid Ambulance Dashboard (Modern Card Style)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: 
+        linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+        url('https://static.vecteezy.com/system/resources/previews/025/421/003/original/ambulance-clipart-cartoon-style-simple-emergency-ambulance-car-flat-illustration-hand-drawn-color-doodle-style-hospital-medical-emergency-concept-vector.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+
+    }
+    header {
+      background: #d1322f;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+   .driver-profile {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+.driver-profile img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 2px solid #ccc;
+}
+.driver-info {
+  display: flex;
+  flex-direction: column;
+}
+.driver-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+}
+.driver-id {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+    .map {
+      width: 100%;
+      height: 300px;
+      background: url('IMG-20250712-WA0003.jpg') no-repeat center center;
+      background-size: cover;
+    }
+    .eta {
+      text-align: center;
+      font-size: 1.3rem;
+      padding: 1rem;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      padding: 1rem;
+    }
+    .buttons button {
+      flex: 1;
+      margin: 0 0.5rem;
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+      color: #fff;
+    }
+    .buttons button:hover {
+      transform: scale(1.05);
+    }
+    .start {
+      background: #28a745;
+    }
+    .end {
+      background: #dc3545;
+    }
+    .status {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+    .buttons button i {
+      margin-right: 0.5rem;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    🚑 EMERGENCY – HIGH PRIORITY
+  </header>
+    <nav style="text-align:center; margin-top:0.5rem;">
+  <a href="trip-history.html" style="margin:0 1rem; color:#180202; text-decoration:underline;">Trip History</a>
+  <a href="settings.html" style="margin:0 1rem; color:#140101; text-decoration:underline;">Settings</a>
+</nav>
+
+  <div class="container">
+    <div class="card">
+    <div class="driver-profile">
+  <img src="https://img.freepik.com/premium-photo/male-ambulance-driver-character-illustration-ai-generated_283836-760.jpg" alt="Driver Photo">
+  <div class="driver-info">
+    <div class="driver-name">John Doe</div>
+    <div class="driver-id">Ambulance ID: A-102</div>
+  </div>
+</div>
+      <div class="map"></div>
+      <div class="eta">
+        Estimated Arrival: <strong>1 min</strong>
+      </div>
+      <div class="buttons">
+        <button class="start" id="startBtn">
+          <i>▶</i> Start Trip
+        </button>
+        <button class="end" id="endBtn">
+          <i>⛔</i> End Trip
+        </button>
+      </div>
+    </div>
+    <div class="status" id="status">
+      Trip not started.
+    </div>
+  </div>
+
+  <script>
+const statusEl = document.getElementById('status');
+const startBtn = document.getElementById('startBtn');
+const endBtn = document.getElementById('endBtn');
+const etaEl = document.querySelector('.eta strong');
+
+let voiceInterval = null;
+let etaCountdown = null;
+let etaMinutes= 1;
+
+startBtn.onclick = () => {
+  statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Trip Started – Drive Safely!';
+  speak(`Trip started. Estimated arrival in ${etaMinutes} minutes. Follow the route safely.`);
+
+  // Start voice reminder every 2 min
+  voiceInterval = setInterval(() => {
+    speak(`Stay on route. Estimated arrival in ${etaMinutes} minutes.`);
+  }, 120000);
+
+  // Start countdown timer
+  etaCountdown = setInterval(() => {
+    etaMinutes--;
+    if (etaMinutes <= 0) {
+      etaEl.textContent = 'Arrived';
+      speak('You have arrived at the destination.');
+      clearInterval(etaCountdown);
+      clearInterval(voiceInterval);
+    } else {
+      etaEl.textContent = `${etaMinutes} min`;
+    }
+  }, 60000); // every 1 minute
+};
+
+endBtn.onclick = () => {
+  statusEl.innerHTML = '<i class="fas fa-check-circle"></i> ✅ Trip Ended – Thank you.';
+  speak('Trip completed. Thank you.');
+  clearInterval(voiceInterval);
+  clearInterval(etaCountdown);
+};
+
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  speechSynthesis.speak(utterance);
+}
+
+</script>
+
+</body>
+</html>
+

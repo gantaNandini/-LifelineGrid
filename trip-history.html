@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trip History - LifelineGrid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #d1322f;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .trip {
+      border-bottom: 1px solid #eee;
+      padding: 0.8rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .trip:last-child {
+      border-bottom: none;
+    }
+    .trip span {
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    📝 Trip History
+  </header>
+  <div class="container">
+    <h2>Recent Trips</h2>
+    <div class="trip">
+      <span>12 July 2025 – Hospital A</span>
+      <span>8 min</span>
+    </div>
+    <div class="trip">
+      <span>11 July 2025 – Hospital B</span>
+      <span>12 min</span>
+    </div>
+    <div class="trip">
+      <span>10 July 2025 – Hospital C</span>
+      <span>9 min</span>
+    </div>
+  </div>
+</body>
+</html>
